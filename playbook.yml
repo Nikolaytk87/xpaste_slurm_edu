@@ -1,0 +1,26 @@
+- name: "Install rails app"
+  hosts: stand2
+  become: true
+  become_user: root
+  vars:
+    home_dir: "/home/vagrant"
+    proj_dir: "{{ home_dir }}/xpaste_practicum"
+    ruby_version: "2.6.0"
+    ruby_install_bundler: true
+    RAILS_ENV: "production"
+    DB_HOST: "127.0.0.1"
+    DB_PORT: 5432
+    DB_NAME: "myappdb"
+    DB_USER: "userappdb"
+    DB_PASSWORD: supersecure
+    postgres_users_no_log: true
+    postgresql_databases:
+      - name: "{{ DB_NAME }}"
+    postgresql_users:
+      - name: "{{ DB_USER }}"
+        password: "{{ DB_PASSWORD }}"
+  roles:
+    - { role: "geerlingguy.postgresql" }
+    - { role: "geerlingguy.nginx" }
+    - { role: "install_ruby" }
+    - { role: "environment_settings" }
